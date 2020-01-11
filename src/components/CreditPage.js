@@ -56,30 +56,35 @@ class CreditPage extends Component {
     this.props.updateAccountBalance(purchaseObject.amount);
   }
   render() { 
-    console.log(this.state.purchases);
-    return (
-        <div>
-          <img src="https://letstalkpayments.com/wp-content/uploads/2016/04/Bank.png" alt="bank"/>
-          <h1>Bank of React</h1>
-          <Link to="/">Home</Link>
+      console.log(this.state.purchases);
 
-          <AccountBalance accountBalance={this.props.getAccountBalance()}/>
-
-          <h3>Credit Purchases</h3>
-          <table>
-            <thead>
+      var results = this.state.purchases.map( (e) => {
+	      return <tr> <td>{e.description}</td> <td>{e.amount}</td> <td>{e.date}</td></tr>
+	  });
+      
+      return (
+	      <div>
+	      <img src="https://letstalkpayments.com/wp-content/uploads/2016/04/Bank.png" alt="bank"/>
+	      <h1>Bank of React</h1>
+	      <Link to="/">Home</Link>
+	      
+	      <AccountBalance accountBalance={this.props.getAccountBalance()}/>
+	      
+	      <h3>Credit Purchases</h3>
+	      <table>
+	      <thead>
               <tr>
-                <th>Description</th>
-                <th>Amount</th>
-                <th>Date</th>
+	      <th>Description</th>
+	      <th>Amount</th>
+	      <th>Date</th>
               </tr>
-            </thead>
-            <tbody>
-              {}
-            </tbody>
-          </table>
-        </div>
-    );
+	      </thead>
+	      <tbody>
+		  {results}
+	      </tbody>
+	      </table>
+	      </div>
+	      );
   }
 }
 
