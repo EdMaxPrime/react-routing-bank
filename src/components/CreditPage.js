@@ -7,16 +7,33 @@ class CreditPage extends Component {
     super(props);
     /* Initialize state to an empty list of purchases */
     this.state = {
-      purchases: []
+      creditsNotAdded: [],
+      purchases: [],
+      mounted: false
     }
     /* Make an API call to get the initial list of purchases. 
     * Hardcoded for now. This code should be in the callback */
     var data = [{id: "qwbdh", description: "First", amount: 47, date: "11-01-2019"}];
     /* After the API gives us a list of purchases, we need to add each one
-    * to this component */
-    for(var i = 0; i < data.length; i++) {
-      this.addCredit(data[i]);
+    * to this component, but store them in a temp list */
+    if(this.state.mounted == false) {
+      this.state.creditsNotAdded = data;
+    } 
+    else {
+      for (var i = 0; i < data.length; i++) {
+        this.addCredit(data[i]);
+      }
     }
+  }
+  componentDidMount() {
+    //move from temp array to actual list of table rows
+    for (var i = 0; i < this.state.creditsNotAdded.length; i++) {
+      this.addCredit(this.state.creditsNotAdded[i]);
+    }
+    this.setState({
+      creditsNotAdded: [],
+      mounted: true
+    });
   }
   /**
   * Purchase Object should have these keys: id, description, amount, date 
@@ -39,6 +56,7 @@ class CreditPage extends Component {
     this.props.updateAccountBalance(purchaseObject.amount);
   }
   render() { 
+    console.log(this.state.purchases);
     return (
         <div>
           <img src="https://letstalkpayments.com/wp-content/uploads/2016/04/Bank.png" alt="bank"/>
