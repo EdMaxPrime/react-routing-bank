@@ -83,7 +83,7 @@ class CreditPage extends Component {
     }
 
     setAmount = (event) => {
-        this.setState({newAmount: event.target.value});
+        this.setState({newAmount: parseInt(event.target.value)});
     }
 
     render() { 
