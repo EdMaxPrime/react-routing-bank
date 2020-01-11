@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import AccountBalance from './AccountBalance';
+import PurchaseForm from './PurchaseForm';
 import {Link} from 'react-router-dom';
 
 class CreditPage extends Component {
@@ -60,6 +61,31 @@ class CreditPage extends Component {
         * on all pages and not just this one. */
         this.props.updateAccountBalance(purchaseObject.amount);
     }
+
+    /**
+    * This method is an even listener for the form. It will take data
+    * from the inputs about the new credit and then call the addCredit()
+    * method to add it to the app. 
+    */
+    handleNewCredit = (event) => {
+        var now = new Date();
+        this.addCredit({
+            id: now.getTime(),
+            description: this.state.newDescription,
+            amount: this.state.newAmount,
+            date: now.toISOString()
+        });
+        event.preventDefault();
+    }
+
+    setDescription = (event) => {
+        this.setState({newDescription: event.target.value});
+    }
+
+    setAmount = (event) => {
+        this.setState({newAmount: event.target.value});
+    }
+
     render() { 
         console.log(this.state.purchases);
 
@@ -70,11 +96,13 @@ class CreditPage extends Component {
         return (
             <div>
             <img src="https://letstalkpayments.com/wp-content/uploads/2016/04/Bank.png" alt="bank"/>
-            <h1>Bank of React</h1>
+            <h1>Bank of React: Credit</h1>
             <Link to="/">Home</Link>
           
             <AccountBalance accountBalance={this.props.getAccountBalance()}/>
-          
+            
+            <PurchaseForm title="New Credit" setDescription={this.setDescription} setAmount={this.setAmount} handleForm={this.handleNewCredit}></PurchaseForm>
+
             <h3>Credit Purchases</h3>
             <table>
                 <thead>
