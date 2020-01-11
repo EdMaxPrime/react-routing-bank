@@ -21,6 +21,11 @@ class App extends Component {
     this.getAccountBalance = this.getAccountBalance.bind(this);
   }
 
+  /**
+  * This function is a callback passed to the credit page component.
+  * It updates the account balance across all pages by adding the amount.
+  * @param amount  the number of dollars to be added to balance 
+  */
   addCredit(amount) {
     var user = this.state.currentUser;
     this.setState({
@@ -29,6 +34,13 @@ class App extends Component {
     });
   }
 
+  /**
+  * This method is a callback passed to all the pages. This is the only
+  * way to get the account balance and see it update. Passing just a
+  * variable won't let the pages see changes to the number. This is solved
+  * by using a function like this that returns a reference to the number.
+  * @return  the number of dollars in the account 
+  */
   getAccountBalance () {
     return this.state.accountBalance;
   }
