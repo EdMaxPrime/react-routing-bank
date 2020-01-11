@@ -7,73 +7,21 @@ import {Link} from 'react-router-dom';
 class CreditPage extends Component {
     constructor(props) {
         super(props);
-        /* Initialize state to an empty list of purchases */
         this.state = {
-            creditsNotAdded: [],
-            purchases: [],
-            mounted: false
-        }
-        /* Make an API call to get the initial list of purchases. */
-        fetch("https://moj-api.herokuapp.com/credits")
-        .then((response) => (
-            response.json()))
-        .then((json) => {
-            /* After the API gives us a list of purchases, we need to add each one
-            * to this component, but store them in a temp list */
-            if(this.state.mounted == false) {
-                this.state.creditsNotAdded = json;
-            } 
-            else {
-                for (var i = 0; i < json.length; i++) {
-                    this.addCredit(json[i]);
-                }
-            }
-        });
-    }
-
-    /** 
-    * This is a lifecycle method from React. Here, we move data from
-    * the API into the proper state object. This is just in case the
-    * API returns data before this component is mounted. */
-    componentDidMount() {
-        //move from temp array to actual list of table rows
-        for (var i = 0; i < this.state.creditsNotAdded.length; i++) {
-            this.addCredit(this.state.creditsNotAdded[i]);
-        }
-        this.setState({
-            creditsNotAdded: [],
-            mounted: true
-        });
-    }
-    /**
-    * Purchase Object should have these keys: id, description, amount, date 
-    */
-    addCredit(purchaseObject) {
-        /*Make a copy of the list of credit purchases, so that the state 
-        * isn't modified directly. That could mess with the lifecycle. */
-        var newList = this.state.purchases.slice(0, this.state.purchases.length);
-        /* Add new purchase to the list */
-        newList.push(purchaseObject);
-        /* Update the state on this component, which adds an extra row
-        * to the table. */
-        this.setState({
-            purchases: newList
-        });
-        /* Call the parent's callback function, which was provided to use
-        * as a prop here. The App container will update the account balance
-        * somehow. We tell the parent to do this so that the change is reflected
-        * on all pages and not just this one. */
-        this.props.updateAccountBalance(purchaseObject.amount);
+            newDescription: "",
+            newAmount: ""
+        };
     }
 
     /**
     * This method is an even listener for the form. It will take data
-    * from the inputs about the new credit and then call the addCredit()
-    * method to add it to the app. 
+    * from the inputs about the new debit, convert it into an object,
+    * then notify the parent/container/app to update the data and the
+    * account balance. 
     */
     handleNewCredit = (event) => {
         var now = new Date();
-        this.addCredit({
+        this.props.updateAccountBalance({
             id: now.getTime(),
             description: this.state.newDescription,
             amount: this.state.newAmount,
@@ -82,10 +30,16 @@ class CreditPage extends Component {
         event.preventDefault();
     }
 
+    /**
+    * Captures events from the text field for the new purchase's
+    * description. Saves into the state until it is needed. */
     setDescription = (event) => {
         this.setState({newDescription: event.target.value});
     }
 
+    /**
+    * Captures events from the text field for the new purchase's
+    * amount. Saves into the state until it is needed. */
     setAmount = (event) => {
         this.setState({newAmount: parseInt(event.target.value)});
     }
@@ -102,7 +56,7 @@ class CreditPage extends Component {
             <PurchaseForm title="New Credit" setDescription={this.setDescription} setAmount={this.setAmount} handleForm={this.handleNewCredit}></PurchaseForm>
 
             <h3>Credit Purchases</h3>
-            <Table rows={this.state.purchases} />
+            <Table rows={this.props.getData()} />
             </div>
         );
     }
