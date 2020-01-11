@@ -3,6 +3,7 @@ import {BrowserRouter as Router, Route} from 'react-router-dom';
 import Home from './components/Home';
 import UserProfile from './components/UserProfile';
 import CreditPage from './components/CreditPage';
+import DebitPage from './components/DebitPage';
 
 class App extends Component {
 
@@ -18,6 +19,7 @@ class App extends Component {
     }
     //Bind This
     this.addCredit = this.addCredit.bind(this);
+    this.addDebit = this.addDebit.bind(this);
     this.getAccountBalance = this.getAccountBalance.bind(this);
   }
 
@@ -30,6 +32,19 @@ class App extends Component {
     var user = this.state.currentUser;
     this.setState({
       accountBalance: this.state.accountBalance + amount,
+      currentUser: user
+    });
+  }
+
+  /**
+  * This function is a callback passed to the debit page component.
+  * It updates the account balance across all pages by adding the amount.
+  * @param amount  the number of dollars to be added to balance 
+  */
+  addDebit(amount) {
+    var user = this.state.currentUser;
+    this.setState({
+      accountBalance: this.state.accountBalance - amount,
       currentUser: user
     });
   }
@@ -52,6 +67,7 @@ class App extends Component {
         <UserProfile userName={this.state.currentUser.userName} memberSince={this.state.currentUser.memberSince}  />
     );
     const CreditComponent = () => (<CreditPage updateAccountBalance={this.addCredit} getAccountBalance={this.getAccountBalance} />);
+    const DebitComponent = () => (<DebitPage updateAccountBalance={this.addDebit} getAccountBalance={this.getAccountBalance} />);
 
     return (
         <Router>
@@ -59,6 +75,7 @@ class App extends Component {
             <Route exact path="/" render={HomeComponent}/>
             <Route exact path="/userProfile" render={UserProfileComponent}/>
             <Route exact path="/credits" render={CreditComponent}/>
+            <Route exact path="/debits" render={DebitComponent}/>
           </div>
         </Router>
     );
