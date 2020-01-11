@@ -13,19 +13,22 @@ class CreditPage extends Component {
             purchases: [],
             mounted: false
         }
-        /* Make an API call to get the initial list of purchases. 
-        * Hardcoded for now. This code should be in the callback */
-        var data = [{id: "qwbdh", description: "First", amount: 47, date: "11-01-2019"}];
-        /* After the API gives us a list of purchases, we need to add each one
-        * to this component, but store them in a temp list */
-        if(this.state.mounted == false) {
-            this.state.creditsNotAdded = data;
-        } 
-        else {
-            for (var i = 0; i < data.length; i++) {
-                this.addCredit(data[i]);
+        /* Make an API call to get the initial list of purchases. */
+        fetch("https://moj-api.herokuapp.com/credits")
+        .then((response) => (
+            response.json()))
+        .then((json) => {
+            /* After the API gives us a list of purchases, we need to add each one
+            * to this component, but store them in a temp list */
+            if(this.state.mounted == false) {
+                this.state.creditsNotAdded = json;
+            } 
+            else {
+                for (var i = 0; i < json.length; i++) {
+                    this.addCredit(json[i]);
+                }
             }
-        }
+        });
     }
 
     /** 
