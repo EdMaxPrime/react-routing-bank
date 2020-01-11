@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import AccountBalance from './AccountBalance';
 import PurchaseForm from './PurchaseForm';
+import Table from './Table';
 import {Link} from 'react-router-dom';
 
 class CreditPage extends Component {
@@ -87,12 +88,6 @@ class CreditPage extends Component {
     }
 
     render() { 
-        console.log(this.state.purchases);
-
-        var results = this.state.purchases.map( (e) => {
-            return (<tr key={e.id}><td>{e.description}</td> <td>{e.amount}</td> <td>{e.date}</td></tr>)
-        });
-
         return (
             <div>
             <img src="https://letstalkpayments.com/wp-content/uploads/2016/04/Bank.png" alt="bank"/>
@@ -104,18 +99,7 @@ class CreditPage extends Component {
             <PurchaseForm title="New Credit" setDescription={this.setDescription} setAmount={this.setAmount} handleForm={this.handleNewCredit}></PurchaseForm>
 
             <h3>Credit Purchases</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Description</th>
-                        <th>Amount</th>
-                        <th>Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {results}
-                </tbody>
-            </table>
+            <Table rows={this.state.purchases} />
             </div>
         );
     }
