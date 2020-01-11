@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
 import Home from './components/Home';
 import UserProfile from './components/UserProfile';
+import CreditPage from './components/CreditPage';
 
 class App extends Component {
 
@@ -15,6 +16,21 @@ class App extends Component {
         memberSince: '08/23/99',
       }
     }
+    //Bind This
+    this.addCredit = this.addCredit.bind(this);
+    this.getAccountBalance = this.getAccountBalance.bind(this);
+  }
+
+  addCredit(amount) {
+    var user = this.state.currentUser;
+    this.setState({
+      accountBalance: this.state.accountBalance + amount,
+      currentUser: user
+    });
+  }
+
+  getAccountBalance () {
+    return this.state.accountBalance;
   }
 
   render() {
@@ -23,12 +39,14 @@ class App extends Component {
     const UserProfileComponent = () => (
         <UserProfile userName={this.state.currentUser.userName} memberSince={this.state.currentUser.memberSince}  />
     );
+    const CreditComponent = () => (<CreditPage updateAccountBalance={this.addCredit} getAccountBalance={this.getAccountBalance} />);
 
     return (
         <Router>
           <div>
             <Route exact path="/" render={HomeComponent}/>
             <Route exact path="/userProfile" render={UserProfileComponent}/>
+            <Route exact path="/credits" render={CreditComponent}/>
           </div>
         </Router>
     );
