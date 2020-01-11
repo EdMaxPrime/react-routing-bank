@@ -1,0 +1,28 @@
+/* Give the cells a border */
+table, tr, td, th {
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+
+/* Make the table stretch the full width of the page */
+table {
+	width: 100%;
+	table-layout: fixed;
+}
+
+/* Highlight the row of column names */
+thead {
+	background-color: #eee;
+}
+
+tr {
+	border-bottom-width: 2px;
+}
+
+th {
+	padding: 10px;
+}
+
+td {
+	padding: 5px;
+}
